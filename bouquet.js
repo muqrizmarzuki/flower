@@ -1,5 +1,6 @@
 /* ==========================================================================
-   Bouquet Engine - Interactive Lift-Up & Floating Top Indicator for Sayang
+   Bouquet Engine - 2-Step Mobile Touch Engine for Sayang
+   (1st Tap: Lifts flower & shows top indicator | 2nd Tap: Opens love note popup)
    ========================================================================== */
 
 class BouquetEngine {
@@ -11,10 +12,10 @@ class BouquetEngine {
 
         this.time = 0;
         this.hoveredFlowerIndex = -1;
+        this.selectedFlowerIndex = -1; // Tracks 1st tap selection on mobile
         this.mouseX = 0;
         this.mouseY = 0;
         this.onFlowerClick = onFlowerClick;
-        this.lastTriggerTime = 0;
 
         // Image Cache for Official DigiBouquet Assets
         this.assets = {};
@@ -44,58 +45,57 @@ class BouquetEngine {
     init() {
         this.loadAssets();
 
-        const triggerClickAtCoords = (clientX, clientY) => {
-            const now = Date.now();
-            if (now - this.lastTriggerTime < 350) return; // Prevent duplicate double taps
-            
-            const flower = this.getFlowerAtCoords(clientX, clientY);
-            if (flower && this.onFlowerClick && typeof this.onFlowerClick === 'function') {
-                this.lastTriggerTime = now;
-                this.onFlowerClick(flower);
+        const handleMobileTouch = (clientX, clientY) => {
+            const hitIndex = this.getFlowerIndexAtCoords(clientX, clientY);
+
+            if (hitIndex === -1) {
+                // Tapped empty space -> unselect current flower
+                this.selectedFlowerIndex = -1;
+                return;
+            }
+
+            if (this.selectedFlowerIndex === hitIndex) {
+                // 2nd Touch Tap on the same flower -> OPEN MODAL POPUP!
+                const flower = this.flowers[hitIndex];
+                if (this.onFlowerClick && typeof this.onFlowerClick === 'function') {
+                    this.onFlowerClick(flower);
+                }
+                this.selectedFlowerIndex = -1; // Reset after opening
+            } else {
+                // 1st Touch Tap on a flower -> LIFT UP & SELECT FLOWER!
+                this.selectedFlowerIndex = hitIndex;
+                const flower = this.flowers[hitIndex];
+                this.mouseX = flower.x;
+                this.mouseY = flower.y;
             }
         };
 
-        // Pointer Events (Modern Standard for iOS Safari, Chrome Mobile, Android, & Desktop)
-        if (window.PointerEvent) {
-            this.canvas.addEventListener('pointermove', (e) => {
-                this.updatePointerCoords(e.clientX, e.clientY);
-            });
+        // Mobile Touch Events (1st tap selects & lifts, 2nd tap opens modal)
+        this.canvas.addEventListener('touchstart', (e) => {
+            if (e.touches && e.touches.length > 0) {
+                const touch = e.touches[0];
+                handleMobileTouch(touch.clientX, touch.clientY);
+            }
+        }, { passive: true });
 
-            this.canvas.addEventListener('pointerdown', (e) => {
-                this.updatePointerCoords(e.clientX, e.clientY);
-            });
+        // Desktop Mouse Hover
+        this.canvas.addEventListener('mousemove', (e) => {
+            this.updatePointerCoords(e.clientX, e.clientY);
+        });
 
-            this.canvas.addEventListener('pointerup', (e) => {
-                triggerClickAtCoords(e.clientX, e.clientY);
-            });
-        } else {
-            // Fallback Mouse & Touch Listeners
-            this.canvas.addEventListener('mousemove', (e) => {
-                this.updatePointerCoords(e.clientX, e.clientY);
-            });
-
-            this.canvas.addEventListener('click', (e) => {
-                triggerClickAtCoords(e.clientX, e.clientY);
-            });
-
-            const handleTouchMove = (e) => {
-                if (e.touches && e.touches.length > 0) {
-                    const touch = e.touches[0];
-                    this.updatePointerCoords(touch.clientX, touch.clientY);
+        // Desktop Mouse Click (Desktop 1-click shortcut or standard click)
+        this.canvas.addEventListener('click', (e) => {
+            // Only handle desktop clicks if not triggered by touch
+            if (matchMedia('(pointer: fine)').matches) {
+                const hitIndex = this.getFlowerIndexAtCoords(e.clientX, e.clientY);
+                if (hitIndex !== -1) {
+                    const flower = this.flowers[hitIndex];
+                    if (this.onFlowerClick && typeof this.onFlowerClick === 'function') {
+                        this.onFlowerClick(flower);
+                    }
                 }
-            };
-
-            const handleTouchEnd = (e) => {
-                if (e.changedTouches && e.changedTouches.length > 0) {
-                    const touch = e.changedTouches[0];
-                    triggerClickAtCoords(touch.clientX, touch.clientY);
-                }
-            };
-
-            this.canvas.addEventListener('touchstart', handleTouchMove, { passive: true });
-            this.canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
-            this.canvas.addEventListener('touchend', handleTouchEnd, { passive: true });
-        }
+            }
+        });
 
         this.loadPreset();
     }
@@ -108,23 +108,23 @@ class BouquetEngine {
         }
     }
 
-    getFlowerAtCoords(clientX, clientY) {
+    getFlowerIndexAtCoords(clientX, clientY) {
         const rect = this.canvas.getBoundingClientRect();
-        if (!rect.width || !rect.height) return null;
+        if (!rect.width || !rect.height) return -1;
 
         const x = (clientX - rect.left) * (this.width / rect.width);
         const y = (clientY - rect.top) * (this.height / rect.height);
 
-        // Check flowers from top-most layer to bottom-most layer with generous touch radius (0.75x)
+        // Check flowers from top-most layer to bottom-most layer with generous touch radius (0.8x)
         for (let i = this.flowers.length - 1; i >= 0; i--) {
             const flower = this.flowers[i];
             const dx = x - flower.x;
             const dy = y - (flower.y + (flower.liftOffset || 0));
-            if (Math.hypot(dx, dy) < flower.size * 0.75) {
-                return flower;
+            if (Math.hypot(dx, dy) < flower.size * 0.8) {
+                return i;
             }
         }
-        return null;
+        return -1;
     }
 
     loadAssets() {
@@ -238,31 +238,34 @@ class BouquetEngine {
         this.renderBushBacking();
 
         // 2. Render Spaced Flowers
-        let hoveredFound = -1;
+        let activeIndex = -1;
         this.flowers.forEach((flower, index) => {
             const dx = this.mouseX - flower.x;
             const dy = this.mouseY - (flower.y + (flower.liftOffset || 0));
-            const isHovered = Math.hypot(dx, dy) < flower.size * 0.45;
+            const isMouseHovered = Math.hypot(dx, dy) < flower.size * 0.45;
+            const isSelected = (index === this.selectedFlowerIndex);
 
-            if (isHovered) hoveredFound = index;
+            const isActive = isMouseHovered || isSelected;
 
-            // Lift-Up Animation (-22px vertical glide up when touched)
-            const targetLift = isHovered ? -22 : 0;
+            if (isActive) activeIndex = index;
+
+            // Lift-Up Animation (-24px vertical glide up when touched or hovered)
+            const targetLift = isActive ? -24 : 0;
             flower.liftOffset += (targetLift - flower.liftOffset) * 0.2;
 
-            // Hover Scale
-            const targetScale = isHovered ? 1.08 : 1.0;
+            // Scale Bump
+            const targetScale = isActive ? 1.09 : 1.0;
             flower.hoverScale += (targetScale - flower.hoverScale) * 0.15;
 
             this.renderFlower(flower);
         });
 
-        this.hoveredFlowerIndex = hoveredFound;
-        this.canvas.style.cursor = hoveredFound !== -1 ? 'pointer' : 'default';
+        this.hoveredFlowerIndex = activeIndex;
+        this.canvas.style.cursor = activeIndex !== -1 ? 'pointer' : 'default';
 
         // 3. Draw Floating Top Indicator Badge over active flower
-        if (hoveredFound !== -1) {
-            const activeFlower = this.flowers[hoveredFound];
+        if (activeIndex !== -1) {
+            const activeFlower = this.flowers[activeIndex];
             this.renderTopIndicator(activeFlower);
         }
 
@@ -311,7 +314,7 @@ class BouquetEngine {
         this.ctx.save();
 
         const currentY = flower.y + (flower.liftOffset || 0) - (flower.size * 0.52);
-        const text = "💌 Tap for note ✨";
+        const text = "💌 Tap again for note ✨";
 
         this.ctx.font = "bold 13px 'Outfit', sans-serif";
         const textMetrics = this.ctx.measureText(text);
