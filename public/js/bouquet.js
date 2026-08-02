@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Bouquet Engine - Expanded Personal Romantic Love Messages for Sayang (Jabigah)
+   Bouquet Engine - Super Casual, Real Heartfelt Love Messages for Sayang (Jabigah)
    ========================================================================== */
 
 class BouquetEngine {
@@ -186,28 +186,28 @@ class BouquetEngine {
     }
 
     loadPreset() {
-        // Expanded Deeply Personal Messages from Muqriz to Sayang (Jabigah)
+        // Super Casual, Real Heartfelt Love Messages for Sayang (Jabigah) from Muqriz
         this.flowers = [
             // Back Row Stems (Tallest Crowns with Ample Headroom)
             {
                 type: 'sunflower',
                 name: 'Golden Sunflower',
                 imgSrc: 'assets/official/color_sunflower.webp',
-                message: 'Ever since 25 May 2017, you have been the bright sunshine in my life, Sayang. Just seeing your smile and hearing your voice puts me in a good mood every single day. Being around you just makes everything feel warmer and happier! 🌻',
+                message: 'Ever since 25 May 2017, you’ve been the sunshine in my life, Sayang. Even when we don’t get to see each other every day, just knowing you’re mine puts me in such a good mood!\n\n🌻 Why I picked this for you:\nSunflowers always turn to face the sun, just like how my eyes are always on you!',
                 x: 250, y: 110, size: 135, rotation: -0.02, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'orchid',
                 name: 'Blush Orchid',
                 imgSrc: 'assets/official/color_orchid.webp',
-                message: 'Back in school I used to think kenapa la panggil jabigah ni hahah, but it ended up being my absolute favorite nickname for you! You will always be my sweet, special, forever Jabigah. ✨',
+                message: 'Back in school I used to think "kenapa la panggil jabigah ni hahah", but it ended up being my favorite nickname for you! You’ll always be my sweet, special, forever Jabigah.\n\n✨ Why I picked this for you:\nOrchids are rare and bloom for a long time, just like our special bond!',
                 x: 155, y: 122, size: 120, rotation: -0.08, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'lily',
                 name: 'White Lily',
                 imgSrc: 'assets/lily.webp',
-                message: 'I love how sweet and genuine your heart is, Sayang. Every simple thing you do to take care of me always puts a smile on my face. I am so grateful to have someone as caring as you by my side. 🌺',
+                message: 'I really love how sweet and genuine you are, Sayang. Every little thing you do to take care of me always puts a big smile on my face.\n\n🌺 Why I picked this for you:\nWhite lilies stand for pure honesty and sweet devotion!',
                 x: 345, y: 122, size: 125, rotation: 0.08, hoverScale: 1, liftOffset: 0
             },
 
@@ -216,35 +216,35 @@ class BouquetEngine {
                 type: 'rose',
                 name: 'Red Velvet Rose',
                 imgSrc: 'assets/rose.webp',
-                message: 'A red rose for my one and only! After all these years together since school days, my feelings for you have only grown deeper. I love you so much, Sayang, you are my favorite person in the whole world! 🌹❤️',
+                message: 'A red rose for my one and only! After all these years since school, I love you more and more every day, Sayang. You’re my favorite person in the whole world!\n\n🌹 Why I picked this for you:\nRed roses are the classic symbol of true love!',
                 x: 250, y: 180, size: 125, rotation: -0.03, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'tulip',
                 name: 'Pink Tulip',
                 imgSrc: 'assets/tulip.webp',
-                message: 'I don’t even care where we go, I just love going out with you, Sayang. Whether we are trying new places or just driving around together, any date with you is the absolute best part of my day! 🌷',
+                message: 'I don’t even care where we go, I just love going out with you, Sayang. Whether we’re trying good food or just driving around, hanging out with you is the best part of my day!\n\n🌷 Why I picked this for you:\nTulips keep growing toward the light, just like how being with you brightens my day!',
                 x: 120, y: 185, size: 115, rotation: -0.1, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'peony',
                 name: 'Pink Peony',
                 imgSrc: 'assets/peony.webp',
-                message: 'Remember back in school when I loved fighting and teasing you just so I could get your attention? HAHAHA! Your cute reaction and your laugh are still my favorite things in the world. 🌸',
+                message: 'Remember in school when I used to kacau and fight with you just to get your attention? HAHAHA! Your cute reaction and your laugh are still my favorite things.\n\n🌸 Why I picked this for you:\nPeonies are all about happy romance and playful laughter!',
                 x: 185, y: 182, size: 120, rotation: 0.03, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'ranunculus',
                 name: 'Blush Ranunculus',
                 imgSrc: 'assets/official/color_ranunculus.webp',
-                message: 'Thank you for always taking care of me so thoughtfully every single day, Sayang. Your gentleness, patience, and love mean everything to me, and I fall for you more every day! ❤️',
+                message: 'Thank you for always taking such good care of me, Sayang. Your gentleness and love mean everything to me, and I appreciate you so much!\n\n❤️ Why I picked this for you:\nRanunculus flowers have lots of soft layers, just like how I appreciate you more every day!',
                 x: 315, y: 182, size: 120, rotation: -0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'anemone',
                 name: 'Purple Anemone',
                 imgSrc: 'assets/anemone.webp',
-                message: 'You are always on my mind, Sayang. From our school days in 2017 all the way until today, I still catch myself thinking about you out of nowhere throughout the day! 🪻',
+                message: 'You’re always on my mind, Sayang. From our school days in 2017 until today, I still catch myself randomly thinking about you all day long!\n\n🪻 Why I picked this for you:\nAnemones stand for thinking of someone and keeping them close in your heart!',
                 x: 380, y: 185, size: 115, rotation: 0.1, hoverScale: 1, liftOffset: 0
             },
 
@@ -253,28 +253,28 @@ class BouquetEngine {
                 type: 'carnation',
                 name: 'Blush Carnation',
                 imgSrc: 'assets/carnation.webp',
-                message: 'Let’s go get you a big cold Teh Ais! Thank you for being my girlfriend, my partner, and my best friend all these years. Life is just so much sweeter with you, Sayang. 🏵️',
+                message: 'Jom go get you a big cold Teh Ais! Thank you for being my girlfriend and my best friend all these years. Life is just way sweeter with you, Sayang.\n\n🏵️ Why I picked this for you:\nCarnations stand for deep friendship and sweet comfort!',
                 x: 165, y: 232, size: 110, rotation: 0.06, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'daisy',
                 name: 'Sweet White Daisy',
                 imgSrc: 'assets/daisy.webp',
-                message: 'Being with you is just so easy, comfortable, and natural. I love how we can just be ourselves together without any worries. I treasure our journey so much! 🌼',
+                message: 'Being with you is just so easy and comfortable. I love how we can just be ourselves together without overthinking anything!\n\n🌼 Why I picked this for you:\nDaisies are actually two flowers growing in perfect harmony!',
                 x: 220, y: 240, size: 100, rotation: -0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'dahlia',
                 name: 'Crimson Dahlia',
                 imgSrc: 'assets/dahlia.webp',
-                message: 'I am so proud of how strong and amazing you are, Sayang. No matter what life throws our way, I will always be right here holding your hand and cheering you on! ❤️',
+                message: 'I’m so proud of how strong and awesome you are, Sayang. No matter what comes our way, I’ll always be right here by your side cheering you on!\n\n🌺 Why I picked this for you:\nDahlias bloom strong through tough weather and stand for resilience!',
                 x: 280, y: 240, size: 105, rotation: 0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'zinnia',
                 name: 'Pink Zinnia',
                 imgSrc: 'assets/zinnia.webp',
-                message: 'I can’t wait until the day I get to marry you and take you on that dream trip to London and Edinburgh! Exploring the world with you will be our best adventure yet, my Jabigah. 🌸',
+                message: 'I can’t wait until the day I marry you and we go on that dream trip to London and Edinburgh! Exploring the world with you is gonna be our best adventure yet, my Jabigah.\n\n🌸 Why I picked this for you:\nZinnias stand for lasting affection and exciting future trips together!',
                 x: 335, y: 232, size: 110, rotation: -0.06, hoverScale: 1, liftOffset: 0
             }
         ];
