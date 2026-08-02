@@ -1,6 +1,9 @@
 /* ==========================================================================
    DigiBouquet Girlfriend Romantic Gift - Mobile-First Design System for Sayang
+   (100% Self-Contained Local Assets & Fonts - No External CDNs)
    ========================================================================== */
+
+@import 'public/css/fonts.css';
 
 :root {
     --bg-page: #F9F9EE;
