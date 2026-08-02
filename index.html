@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="referrer" content="no-referrer-when-downgrade">
     <title>For Sayang ❤️ — DigiBouquet</title>
     <meta name="description" content="A digital flower bouquet gift made with love for Sayang, featuring clickable interactive flowers with hidden romantic love messages.">
     
