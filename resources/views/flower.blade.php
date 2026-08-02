@@ -19,7 +19,7 @@
         <!-- Main Gift Stage: Single Combined Hybrid Bouquet -->
         <main class="gift-stage">
             <div class="bouquet-wrapper">
-                
+
                 <!-- Live Hybrid Canvas Bouquet Stage -->
                 <div class="canvas-container">
                     <canvas id="bouquet-canvas" width="500" height="420"></canvas>
@@ -27,7 +27,7 @@
 
                 <!-- Cards Container (Polaroid Photo + Handwritten Message Card) -->
                 <div class="cards-flex-container">
-                    
+
                     <!-- 1. Floating Polaroid Photo Frame -->
                     <div class="polaroid-card" id="polaroid-card">
                         <div class="tape-strip"></div>
@@ -59,7 +59,7 @@ Every single flower in this bouquet blooms just for you.</textarea>
                                 <span class="card-label">Forever Yours,</span>
                                 <input type="text" id="input-from" class="card-input" value="Alex" placeholder="Alex">
                             </div>
-                            <div class="card-subtagline">Forever my girl ❤️</div>
+                            <div class="card-subtagline">Forever my girl  q ❤️</div>
                         </div>
                     </div>
 
