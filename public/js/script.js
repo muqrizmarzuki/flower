@@ -47,6 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
         modal.classList.add('hidden');
         modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
+
+        if (window.bouquetEngine) {
+            window.bouquetEngine.selectedFlowerIndex = -1;
+        }
     }
 
     if (modalClose) {
@@ -60,14 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Instantiate Bouquet Engine with flower click listener
-    const bouquetEngine = new BouquetEngine('bouquet-canvas', (flower) => {
+    window.bouquetEngine = new BouquetEngine('bouquet-canvas', (flower) => {
         openModal(flower);
     });
 
     // Main 60 FPS Render Loop
     function renderLoop() {
         particleEngine.updateAndRender();
-        bouquetEngine.render();
+        window.bouquetEngine.render();
         petalEngine.updateAndRender();
         requestAnimationFrame(renderLoop);
     }
@@ -82,9 +86,4 @@ document.addEventListener('DOMContentLoaded', () => {
     setInterval(() => {
         petalEngine.triggerShower(2);
     }, 10000);
-
-    // Double-click to trigger extra petal rain for Sayang
-    window.addEventListener('dblclick', () => {
-        petalEngine.triggerShower(25);
-    });
 });

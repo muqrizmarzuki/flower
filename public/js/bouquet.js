@@ -1,6 +1,6 @@
 /* ==========================================================================
    Bouquet Engine - 2-Step Mobile Touch Engine for Sayang
-   (Guarantees flower lifts up FIRST on 1st tap, opens popup ONLY on 2nd tap!)
+   (Clamped Top Indicator Badge & Lowered Canvas Headroom so Top Badges Never Clip)
    ========================================================================== */
 
 class BouquetEngine {
@@ -13,8 +13,8 @@ class BouquetEngine {
         this.time = 0;
         this.hoveredFlowerIndex = -1;
         this.selectedFlowerIndex = -1; // Tracks 1st tap selection on mobile
-        this.mouseX = 0;
-        this.mouseY = 0;
+        this.mouseX = -9999;
+        this.mouseY = -9999;
         this.onFlowerClick = onFlowerClick;
         this.lastTapTime = 0;
 
@@ -32,7 +32,7 @@ class BouquetEngine {
             { name: 'lily', file: 'lily.webp' },
             { name: 'zinnia', file: 'zinnia.webp' },
             { name: 'tulip', file: 'tulip.webp' },
-            
+
             // Official Color Additions
             { name: 'ranunculus', file: 'official/color_ranunculus.webp' },
             { name: 'orchid', file: 'official/color_orchid.webp' },
@@ -51,20 +51,22 @@ class BouquetEngine {
             const now = Date.now();
 
             if (hitIndex === -1) {
-                // Tapped empty space -> reset selection
+                // Tapped empty space outside flowers -> RESUME SEQUENTIAL WAVE IMMEDIATELY!
                 this.selectedFlowerIndex = -1;
+                this.mouseX = -9999;
+                this.mouseY = -9999;
                 return;
             }
 
-            // If 2nd tap happens on the SAME flower AND at least 250ms after the 1st tap:
-            if (this.selectedFlowerIndex === hitIndex && (now - this.lastTapTime > 250)) {
+            // If 2nd tap happens on the SAME selected flower:
+            if (this.selectedFlowerIndex === hitIndex && (now - this.lastTapTime > 150)) {
                 // 2nd Tap -> OPEN POPUP MODAL!
                 const flower = this.flowers[hitIndex];
                 if (this.onFlowerClick && typeof this.onFlowerClick === 'function') {
                     this.onFlowerClick(flower);
                 }
-                this.selectedFlowerIndex = -1; // Reset selection
-            } else if (this.selectedFlowerIndex !== hitIndex) {
+                this.lastTapTime = now;
+            } else {
                 // 1st Tap on a flower -> LIFT UP & SELECT FLOWER (DO NOT OPEN POPUP)!
                 this.selectedFlowerIndex = hitIndex;
                 this.lastTapTime = now;
@@ -94,6 +96,10 @@ class BouquetEngine {
                 if (dist < 15) {
                     if (e.cancelable) e.preventDefault();
                     handleMobileTap(touch.clientX, touch.clientY);
+                } else {
+                    // Page drag/scroll -> clear touch coordinates
+                    this.mouseX = -9999;
+                    this.mouseY = -9999;
                 }
             }
         }, { passive: false });
@@ -101,6 +107,11 @@ class BouquetEngine {
         // Desktop mouse hover & click
         this.canvas.addEventListener('mousemove', (e) => {
             this.updatePointerCoords(e.clientX, e.clientY);
+        });
+
+        this.canvas.addEventListener('mouseleave', () => {
+            this.mouseX = -9999;
+            this.mouseY = -9999;
         });
 
         this.canvas.addEventListener('click', (e) => {
@@ -121,7 +132,6 @@ class BouquetEngine {
         }
     }
 
-    // Stable Touch Hitbox - Evaluates against fixed base coordinates (x, y) so lifting doesn't shift touch target
     getFlowerIndexAtCoords(clientX, clientY) {
         const rect = this.canvas.getBoundingClientRect();
         if (!rect.width || !rect.height) return -1;
@@ -129,16 +139,43 @@ class BouquetEngine {
         const x = (clientX - rect.left) * (this.width / rect.width);
         const y = (clientY - rect.top) * (this.height / rect.height);
 
-        // Check flowers from top-most layer to bottom-most layer with generous touch radius (0.8x size)
-        for (let i = this.flowers.length - 1; i >= 0; i--) {
-            const flower = this.flowers[i];
-            const dx = x - flower.x;
-            const dy = y - flower.y; // Base Y coordinate (STABLE TOUCH ZONE)
-            if (Math.hypot(dx, dy) < flower.size * 0.8) {
-                return i;
+        // 1. Check selected flower first
+        if (this.selectedFlowerIndex !== -1 && this.selectedFlowerIndex < this.flowers.length) {
+            const currentFlower = this.flowers[this.selectedFlowerIndex];
+            const currentY = currentFlower.y + (currentFlower.liftOffset || 0);
+
+            const dxBody = x - currentFlower.x;
+            const dyBody = y - currentY;
+
+            const dxPill = x - currentFlower.x;
+            const dyPill = y - Math.max(8, currentY - currentFlower.size * 0.52 - 14);
+
+            if (Math.hypot(dxBody, dyBody) < currentFlower.size * 0.48 || (Math.abs(dxPill) < 60 && Math.abs(dyPill) < 20)) {
+                return this.selectedFlowerIndex;
             }
         }
-        return -1;
+
+        // 2. Layer-Aware Closest Matching across all 12 flowers
+        let closestIndex = -1;
+        let minDistance = Infinity;
+
+        for (let i = 0; i < this.flowers.length; i++) {
+            const flower = this.flowers[i];
+            const currentY = flower.y + (flower.liftOffset || 0);
+
+            const dx = x - flower.x;
+            const dy = y - currentY;
+            const dist = Math.hypot(dx, dy);
+
+            if (dist < flower.size * 0.46) {
+                if (dist < minDistance) {
+                    minDistance = dist;
+                    closestIndex = i;
+                }
+            }
+        }
+
+        return closestIndex;
     }
 
     loadAssets() {
@@ -150,66 +187,67 @@ class BouquetEngine {
     }
 
     loadPreset() {
-        // Spaced Flower Placement for Mobile Touch Devices
+        // Perfectly Spaced & Headroom-Optimized Flower Placement
+        // Back row stems lowered to y=110 to give ample top padding for badges
         this.flowers = [
-            // Back Row Stems
+            // Back Row Stems (Tallest Crowns with Ample Headroom)
             {
                 type: 'sunflower',
                 name: 'Golden Sunflower',
                 imgSrc: 'assets/official/color_sunflower.webp',
                 message: 'You are my sunshine, Sayang! Thank you for bringing warmth and laughter into my life every day. 🌻❤️',
-                x: 250, y: 110, size: 130, rotation: -0.02, hoverScale: 1, liftOffset: 0
+                x: 250, y: 110, size: 135, rotation: -0.02, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'orchid',
                 name: 'Blush Orchid',
                 imgSrc: 'assets/official/color_orchid.webp',
                 message: 'You are as rare, elegant, and precious to me as an orchid. I treasure you endlessly, Sayang! ✨',
-                x: 160, y: 115, size: 120, rotation: -0.08, hoverScale: 1, liftOffset: 0
+                x: 155, y: 122, size: 120, rotation: -0.08, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'lily',
                 name: 'White Lily',
                 imgSrc: 'assets/lily.webp',
-                message: 'Pure, sweet, and beautiful—just like your heart, Sayang! 🌺',
-                x: 340, y: 115, size: 125, rotation: 0.08, hoverScale: 1, liftOffset: 0
+                message: 'Pure, sweet, and beautiful just like your heart, Sayang! 🌺',
+                x: 345, y: 122, size: 125, rotation: 0.08, hoverScale: 1, liftOffset: 0
             },
 
             // Middle Row Focal Blossoms
+            {
+                type: 'rose',
+                name: 'Red Velvet Rose',
+                imgSrc: 'assets/rose.webp',
+                message: 'My love for you grows stronger with every passing second. You hold the key to my heart forever, Sayang! 🌹',
+                x: 250, y: 180, size: 125, rotation: -0.03, hoverScale: 1, liftOffset: 0
+            },
             {
                 type: 'tulip',
                 name: 'Pink Tulip',
                 imgSrc: 'assets/tulip.webp',
                 message: 'You bring endless joy and magic to my life every single day, Sayang! 🌷',
-                x: 120, y: 170, size: 115, rotation: -0.1, hoverScale: 1, liftOffset: 0
+                x: 120, y: 185, size: 115, rotation: -0.1, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'peony',
                 name: 'Pink Peony',
                 imgSrc: 'assets/peony.webp',
                 message: 'Your beautiful smile brightens up my whole world. Being with you is my favorite place to be, Sayang! 🌸',
-                x: 190, y: 165, size: 120, rotation: 0.03, hoverScale: 1, liftOffset: 0
-            },
-            {
-                type: 'rose',
-                name: 'Red Velvet Rose',
-                imgSrc: 'assets/rose.webp',
-                message: 'My love for you grows stronger with every passing second. You hold the key to my heart forever, Sayang! 🌹',
-                x: 250, y: 155, size: 125, rotation: -0.03, hoverScale: 1, liftOffset: 0
+                x: 185, y: 182, size: 120, rotation: 0.03, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'ranunculus',
                 name: 'Blush Ranunculus',
                 imgSrc: 'assets/official/color_ranunculus.webp',
                 message: 'Through every season of life, I will choose you over and over again, Sayang! ❤️',
-                x: 310, y: 165, size: 120, rotation: -0.04, hoverScale: 1, liftOffset: 0
+                x: 315, y: 182, size: 120, rotation: -0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'anemone',
                 name: 'Purple Anemone',
                 imgSrc: 'assets/anemone.webp',
                 message: 'My heart beats only for you, my dearest Sayang! 🪻',
-                x: 380, y: 170, size: 115, rotation: 0.1, hoverScale: 1, liftOffset: 0
+                x: 380, y: 185, size: 115, rotation: 0.1, hoverScale: 1, liftOffset: 0
             },
 
             // Front Row Accents
@@ -218,28 +256,28 @@ class BouquetEngine {
                 name: 'Blush Carnation',
                 imgSrc: 'assets/carnation.webp',
                 message: 'Thank you for being my best friend, my confidante, and my soulmate. I love you so much, Sayang! 🏵️',
-                x: 165, y: 210, size: 110, rotation: 0.06, hoverScale: 1, liftOffset: 0
+                x: 165, y: 232, size: 110, rotation: 0.06, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'daisy',
                 name: 'Sweet White Daisy',
                 imgSrc: 'assets/daisy.webp',
                 message: 'Forever and always, my heart belongs to you and only you, Sayang! ❤️✨',
-                x: 220, y: 220, size: 100, rotation: -0.04, hoverScale: 1, liftOffset: 0
+                x: 220, y: 240, size: 100, rotation: -0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'dahlia',
                 name: 'Crimson Dahlia',
                 imgSrc: 'assets/dahlia.webp',
                 message: 'You are the most precious gift in my life, Sayang! 🌼',
-                x: 280, y: 220, size: 105, rotation: 0.04, hoverScale: 1, liftOffset: 0
+                x: 280, y: 240, size: 105, rotation: 0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'zinnia',
                 name: 'Pink Zinnia',
                 imgSrc: 'assets/zinnia.webp',
                 message: 'Loving you is the easiest and best thing I have ever done! 🌸',
-                x: 335, y: 210, size: 110, rotation: -0.06, hoverScale: 1, liftOffset: 0
+                x: 335, y: 232, size: 110, rotation: -0.06, hoverScale: 1, liftOffset: 0
             }
         ];
     }
@@ -248,28 +286,51 @@ class BouquetEngine {
         this.time += 0.02;
         this.ctx.clearRect(0, 0, this.width, this.height);
 
+        // Check if user is hovering or selecting any flower
+        let userHoveredIndex = -1;
+        this.flowers.forEach((flower, index) => {
+            const dx = this.mouseX - flower.x;
+            const dy = this.mouseY - flower.y;
+            if (Math.hypot(dx, dy) < flower.size * 0.45) {
+                userHoveredIndex = index;
+            }
+        });
+
+        const isUserInteracting = (this.selectedFlowerIndex !== -1 || userHoveredIndex !== -1);
+
+        // Slow, Gentle Wave Rhythm (~1.2 seconds per flower transition)
+        const totalFlowers = this.flowers.length;
+        const waveStep = Math.floor(this.time * 0.95);
+        const waveIndex = isUserInteracting ? -1 : (waveStep % (totalFlowers + 4));
+
         // 1. Draw Bush Wrapper Backing
         this.renderBushBacking();
 
         // 2. Render Spaced Flowers
         let activeIndex = -1;
         this.flowers.forEach((flower, index) => {
-            const dx = this.mouseX - flower.x;
-            const dy = this.mouseY - flower.y;
-            const isMouseHovered = Math.hypot(dx, dy) < flower.size * 0.45;
+            const isMouseHovered = (index === userHoveredIndex);
             const isSelected = (index === this.selectedFlowerIndex);
-
             const isActive = isMouseHovered || isSelected;
 
             if (isActive) activeIndex = index;
 
-            // Lift-Up Animation (-24px vertical glide up when touched or hovered)
-            const targetLift = isActive ? -24 : 0;
-            flower.liftOffset += (targetLift - flower.liftOffset) * 0.2;
+            // Slow, unhurried 18px lift-up wave transition
+            const isSequentialWaveActive = (!isUserInteracting && index === waveIndex);
+
+            let targetLift = 0;
+            if (isActive) {
+                targetLift = -24; // Full 24px lift on user tap/hover
+            } else if (isSequentialWaveActive) {
+                targetLift = -18; // Slow 18px "Tap me!" wave lift
+            }
+
+            // Smooth ease transition
+            flower.liftOffset += (targetLift - flower.liftOffset) * 0.10;
 
             // Scale Bump
-            const targetScale = isActive ? 1.09 : 1.0;
-            flower.hoverScale += (targetScale - flower.hoverScale) * 0.15;
+            const targetScale = isActive ? 1.09 : (isSequentialWaveActive ? 1.05 : 1.0);
+            flower.hoverScale += (targetScale - flower.hoverScale) * 0.10;
 
             this.renderFlower(flower);
         });
@@ -277,10 +338,15 @@ class BouquetEngine {
         this.hoveredFlowerIndex = activeIndex;
         this.canvas.style.cursor = activeIndex !== -1 ? 'pointer' : 'default';
 
-        // 3. Draw Floating Top Indicator Badge over active flower
+        // 3. Draw Floating Top Indicator Badge
         if (activeIndex !== -1) {
+            // User is hovering/selecting: show "💌 Tap again for note ✨"
             const activeFlower = this.flowers[activeIndex];
-            this.renderTopIndicator(activeFlower);
+            this.renderTopIndicator(activeFlower, "💌 Tap again for note ✨");
+        } else if (waveIndex >= 0 && waveIndex < totalFlowers) {
+            // Sequential wave active on flower: show "💌 Tap me ✨"
+            const waveFlower = this.flowers[waveIndex];
+            this.renderTopIndicator(waveFlower, "💌 Tap me ✨");
         }
 
         // 4. Draw Bush Wrapper Top Overlap
@@ -324,11 +390,11 @@ class BouquetEngine {
         this.ctx.restore();
     }
 
-    renderTopIndicator(flower) {
+    renderTopIndicator(flower, customText) {
         this.ctx.save();
 
         const currentY = flower.y + (flower.liftOffset || 0) - (flower.size * 0.52);
-        const text = "💌 Tap again for note ✨";
+        const text = customText || "💌 Tap again for note ✨";
 
         this.ctx.font = "bold 13px 'Outfit', sans-serif";
         const textMetrics = this.ctx.measureText(text);
@@ -337,7 +403,8 @@ class BouquetEngine {
         const pillHeight = 28;
 
         const pillX = flower.x - pillWidth / 2;
-        const pillY = currentY - pillHeight;
+        // Clamp pillY so it NEVER gets cut off at the top of the canvas (min 6px margin)
+        let pillY = Math.max(6, currentY - pillHeight);
 
         // Draw Pill Shadow
         this.ctx.shadowColor = "rgba(0, 0, 0, 0.15)";

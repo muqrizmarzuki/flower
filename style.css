@@ -1,6 +1,6 @@
 /* ==========================================================================
    DigiBouquet Girlfriend Romantic Gift - Mobile-First Design System for Sayang
-   (100% Self-Contained Local Assets & Fonts - No External CDNs)
+   (100% Self-Contained Local Assets & Option 9 Satisfy Romantic Typography)
    ========================================================================== */
 
 @import 'public/css/fonts.css';
@@ -15,10 +15,23 @@
     
     --font-mono: 'Martian Mono', monospace, monospace;
     --font-handwritten: 'Caveat', 'Dancing Script', cursive;
+    --font-romantic: 'Satisfy', cursive;
     --font-sans: 'Outfit', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     --transition-smooth: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* 10 Romantic Font Classes */
+.font-style-1 { font-family: 'Parisienne', cursive !important; }
+.font-style-2 { font-family: 'Dancing Script', cursive !important; }
+.font-style-3 { font-family: 'Playfair Display', serif !important; font-style: italic !important; }
+.font-style-4 { font-family: 'Sacramento', cursive !important; }
+.font-style-5 { font-family: 'Alex Brush', cursive !important; }
+.font-style-6 { font-family: 'Cinzel Decorative', serif !important; font-size: 2.2rem !important; }
+.font-style-7 { font-family: 'Bodoni Moda', serif !important; font-style: italic !important; }
+.font-style-8 { font-family: 'Allura', cursive !important; }
+.font-style-9 { font-family: 'Satisfy', cursive !important; }
+.font-style-10 { font-family: 'Cormorant Garamond', serif !important; font-style: italic !important; }
 
 *, *::before, *::after {
     box-sizing: border-box;
@@ -55,8 +68,29 @@ html, body {
     z-index: 2;
     max-width: 720px;
     margin: 0 auto;
-    padding: 1.8rem 1.2rem 4rem 1.2rem;
+    padding: 1.2rem 1.2rem 4rem 1.2rem;
     text-align: center;
+}
+
+/* Luxury Romantic Header Typography */
+.header-typography {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0.8rem;
+}
+
+.header-title {
+    font-family: var(--font-romantic);
+    font-size: 3.3rem;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0.1rem 0;
+    letter-spacing: 0.6px;
+    background: linear-gradient(135deg, #111111 0%, #c02636 50%, #111111 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 4px 15px rgba(192, 38, 54, 0.08);
 }
 
 .heart-pulse {
@@ -217,7 +251,7 @@ html, body {
     display: inline-block;
 }
 
-/* 2. Pinned Handwritten Note Card */
+/* 2. Pinned Handwritten Permanent Note Card */
 .note-card {
     position: relative;
     flex: 1;
@@ -262,34 +296,24 @@ html, body {
     font-weight: 600;
 }
 
-.card-input {
-    border: none;
-    background: transparent;
+.card-value {
     font-family: var(--font-sans);
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     font-weight: 700;
     color: #111111;
-    outline: none;
-    width: 60%;
 }
 
 .card-message-box {
     margin: 0.3rem 0;
 }
 
-.card-textarea {
-    width: 100%;
-    border: none;
-    background: transparent;
+.card-message-text {
     font-family: var(--font-sans);
-    font-size: 1.05rem;
+    font-size: 1.0rem;
     font-weight: 500;
     line-height: 1.5;
     color: #111111;
-    outline: none;
-    resize: none;
-    overflow: hidden;
-    min-height: 80px;
+    margin: 0;
 }
 
 .card-subtagline {
@@ -410,9 +434,13 @@ html, body {
 /* Responsive Rules for Mobile Devices (iPhone & Android) */
 @media (max-width: 600px) {
     .page-container {
-        padding: 1.2rem 0.8rem 3rem 0.8rem;
+        padding: 0.8rem 0.8rem 3rem 0.8rem;
     }
     
+    .header-title {
+        font-size: 2.6rem;
+    }
+
     .bouquet-wrapper {
         border-radius: 28px;
         padding: 1rem 0.4rem;
@@ -439,9 +467,5 @@ html, body {
 
     .polaroid-caption-handwritten {
         font-size: 1.6rem;
-    }
-
-    .card-textarea {
-        font-size: 1.0rem;
     }
 }

@@ -4,11 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="referrer" content="no-referrer-when-downgrade">
-    <title>For Sayang ❤️ — DigiBouquet</title>
-    <meta name="description" content="A digital flower bouquet gift made with love for Sayang, featuring clickable interactive flowers with hidden romantic love messages.">
+    <meta name="robots" content="index, follow">
+    <meta name="theme-color" content="#F9F9EE">
 
-    <!-- Local Self-Contained Stylesheet -->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <!-- Primary Title & Meta Description -->
+    <title>For Sayang ❤️ — Blooms Made With Love | DigiBouquet</title>
+    <meta name="title" content="For Sayang ❤️ — Blooms Made With Love | DigiBouquet">
+    <meta name="description" content="A digital flower bouquet gift made with endless love for Sayang by Muqriz. Featuring interactive 2D animated blossoms, hidden romantic love messages, and polaroid memories.">
+    <meta name="keywords" content="digital bouquet, flower gift for sayang, romantic love letter, muqriz, valentine gift, interactive flower bouquet">
+    <meta name="author" content="Muqriz">
+    <link rel="canonical" href="https://syafiqa.muqriz.my/">
+
+    <!-- Open Graph / Facebook / WhatsApp Preview Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://syafiqa.muqriz.my/">
+    <meta property="og:site_name" content="DigiBouquet for Sayang">
+    <meta property="og:title" content="For Sayang ❤️ — Blooms Made With Love">
+    <meta property="og:description" content="A digital flower bouquet gift made with endless love for Sayang by Muqriz. Tap any flower to discover hidden romantic notes!">
+    <meta property="og:image" content="https://syafiqa.muqriz.my/assets/photo.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://syafiqa.muqriz.my/">
+    <meta name="twitter:title" content="For Sayang ❤️ — Blooms Made With Love">
+    <meta name="twitter:description" content="A digital flower bouquet gift made with endless love for Sayang by Muqriz. Tap any flower to discover hidden romantic notes!">
+    <meta name="twitter:image" content="https://syafiqa.muqriz.my/assets/photo.jpg">
+
+    <!-- iOS Apple Web App Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Sayang's Flowers">
+
+    <!-- Local Self-Contained Stylesheet with Cache-Buster -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
 </head>
 <body>
     <!-- Canvas FX Layer for Gentle Ambient Petals -->
@@ -16,10 +47,16 @@
 
     <!-- Main Container -->
     <div class="page-container">
+        
+        <!-- Romantic Header Typography (Option 9: Satisfy Brush Script) -->
+        <header class="header-typography">
+            <h1 id="header-title-text" class="header-title font-style-9">Blooms Made With Love</h1>
+        </header>
+
         <!-- Main Gift Stage: Single Combined Hybrid Bouquet -->
         <main class="gift-stage">
             <div class="bouquet-wrapper">
-
+                
                 <!-- Live Hybrid Canvas Bouquet Stage -->
                 <div class="canvas-container">
                     <canvas id="bouquet-canvas" width="500" height="420"></canvas>
@@ -27,13 +64,13 @@
 
                 <!-- Cards Container (Polaroid Photo + Handwritten Message Card) -->
                 <div class="cards-flex-container">
-
+                    
                     <!-- 1. Floating Polaroid Photo Frame -->
                     <div class="polaroid-card" id="polaroid-card">
                         <div class="tape-strip"></div>
                         <div class="polaroid-frame">
                             <div class="polaroid-photo-wrapper">
-                                <img src="{{ asset('assets/photo.jpg') }}" alt="Sayang & Us" id="polaroid-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'350\' viewBox=\'0 0 300 350\'><rect width=\'100%\' height=\'100%\' fill=\'%232c0b16\'/><path d=\'M150 140 Q180 100 210 140 T150 220 Q120 180 90 140 T150 140\' fill=\'%23e899ac\'/><text x=\'50%\' y=\'270\' fill=\'%23fdfbf7\' font-family=\'serif\' font-size=\'18\' text-anchor=\'middle\'>7/1/2026 ❤️</text></svg>'">
+                                <img src="{{ asset('assets/photo.jpg') }}?v={{ time() }}" alt="Sayang & Us" id="polaroid-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'350\' viewBox=\'0 0 300 350\'><rect width=\'100%\' height=\'100%\' fill=\'%232c0b16\'/><path d=\'M150 140 Q180 100 210 140 T150 220 Q120 180 90 140 T150 140\' fill=\'%23e899ac\'/><text x=\'50%\' y=\'270\' fill=\'%23fdfbf7\' font-family=\'serif\' font-size=\'18\' text-anchor=\'middle\'>7/1/2026 ❤️</text></svg>'">
                                 <div class="photo-glare"></div>
                             </div>
                             <div class="polaroid-caption">
@@ -42,24 +79,22 @@
                         </div>
                     </div>
 
-                    <!-- 2. Pinned Handwritten Love Message Card -->
+                    <!-- 2. Pinned Handwritten Permanent Note Card -->
                     <div class="note-card" id="note-card">
                         <div class="tape-strip right-tape"></div>
                         <div class="card-inner">
                             <div class="card-line">
                                 <span class="card-label">Dearest</span>
-                                <input type="text" id="input-to" class="card-input" value="Sayang" placeholder="Sayang">
+                                <span class="card-value">Sayang,</span>
                             </div>
                             <div class="card-message-box">
-                                <textarea id="input-message" class="card-textarea" rows="3" placeholder="Write your love message...">Happy Valentine’s Day, my love! ❤️
-
-Every single flower in this bouquet blooms just for you.</textarea>
+                                <p class="card-message-text">I will always love you forever & after! ❤️<br><br>Every single flower in this bouquet blooms just for you.</p>
                             </div>
                             <div class="card-line right">
                                 <span class="card-label">Forever Yours,</span>
-                                <input type="text" id="input-from" class="card-input" value="Alex" placeholder="Alex">
+                                <span class="card-value">Muqriz</span>
                             </div>
-                            <div class="card-subtagline">Forever my girl  q ❤️</div>
+                            <div class="card-subtagline">Forever my girl ❤️</div>
                         </div>
                     </div>
 
@@ -84,11 +119,11 @@ Every single flower in this bouquet blooms just for you.</textarea>
     <!-- Hidden Audio Element -->
     <audio id="bg-music" src="{{ asset('assets/music.mp3') }}" preload="auto" loop></audio>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/particles.js') }}"></script>
-    <script src="{{ asset('js/petals.js') }}"></script>
-    <script src="{{ asset('js/bouquet.js') }}"></script>
-    <script src="{{ asset('js/animations.js') }}"></script>
-    <script src="{{ asset('js/script.js') }}"></script>
+    <!-- Scripts with Cache-Buster -->
+    <script src="{{ asset('js/particles.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/petals.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/bouquet.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/animations.js') }}?v={{ time() }}"></script>
+    <script src="{{ asset('js/script.js') }}?v={{ time() }}"></script>
 </body>
 </html>
