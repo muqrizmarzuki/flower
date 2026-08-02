@@ -1,6 +1,6 @@
 /* ==========================================================================
    Bouquet Engine - 2-Step Mobile Touch Engine for Sayang
-   (1st Tap: Lifts flower & shows top indicator | 2nd Tap: Opens love note popup)
+   (Stable Touch Hitbox & Reliable 1st/2nd Tap Workflow)
    ========================================================================== */
 
 class BouquetEngine {
@@ -70,22 +70,31 @@ class BouquetEngine {
             }
         };
 
-        // Mobile Touch Events (1st tap selects & lifts, 2nd tap opens modal)
-        this.canvas.addEventListener('touchstart', (e) => {
+        // Mobile Touch Event Handling (iOS Safari & Android Chrome)
+        const onTouchStart = (e) => {
             if (e.touches && e.touches.length > 0) {
                 const touch = e.touches[0];
                 handleMobileTouch(touch.clientX, touch.clientY);
             }
-        }, { passive: true });
+        };
+
+        this.canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+
+        // Pointer Up fallback for devices using Pointer Events
+        this.canvas.addEventListener('pointerup', (e) => {
+            // Only use pointerup on touch devices if touchstart didn't capture
+            if (e.pointerType === 'touch') {
+                // Handled via touchstart for zero latency
+            }
+        });
 
         // Desktop Mouse Hover
         this.canvas.addEventListener('mousemove', (e) => {
             this.updatePointerCoords(e.clientX, e.clientY);
         });
 
-        // Desktop Mouse Click (Desktop 1-click shortcut or standard click)
+        // Desktop Mouse Click (Direct 1-click on desktop pointer)
         this.canvas.addEventListener('click', (e) => {
-            // Only handle desktop clicks if not triggered by touch
             if (matchMedia('(pointer: fine)').matches) {
                 const hitIndex = this.getFlowerIndexAtCoords(e.clientX, e.clientY);
                 if (hitIndex !== -1) {
@@ -108,6 +117,7 @@ class BouquetEngine {
         }
     }
 
+    // Stable Touch Hitbox - Evaluates against fixed base coordinates (x, y) so lifting doesn't shift the touch target!
     getFlowerIndexAtCoords(clientX, clientY) {
         const rect = this.canvas.getBoundingClientRect();
         if (!rect.width || !rect.height) return -1;
@@ -115,12 +125,12 @@ class BouquetEngine {
         const x = (clientX - rect.left) * (this.width / rect.width);
         const y = (clientY - rect.top) * (this.height / rect.height);
 
-        // Check flowers from top-most layer to bottom-most layer with generous touch radius (0.8x)
+        // Check flowers from top-most layer to bottom-most layer with generous touch radius (0.75x size)
         for (let i = this.flowers.length - 1; i >= 0; i--) {
             const flower = this.flowers[i];
             const dx = x - flower.x;
-            const dy = y - (flower.y + (flower.liftOffset || 0));
-            if (Math.hypot(dx, dy) < flower.size * 0.8) {
+            const dy = y - flower.y; // Base Y coordinate (STABLE TOUCH ZONE)
+            if (Math.hypot(dx, dy) < flower.size * 0.75) {
                 return i;
             }
         }
@@ -241,7 +251,7 @@ class BouquetEngine {
         let activeIndex = -1;
         this.flowers.forEach((flower, index) => {
             const dx = this.mouseX - flower.x;
-            const dy = this.mouseY - (flower.y + (flower.liftOffset || 0));
+            const dy = this.mouseY - flower.y;
             const isMouseHovered = Math.hypot(dx, dy) < flower.size * 0.45;
             const isSelected = (index === this.selectedFlowerIndex);
 
