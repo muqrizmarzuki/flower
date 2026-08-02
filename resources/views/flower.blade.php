@@ -8,19 +8,19 @@
     <meta name="theme-color" content="#F9F9EE">
 
     <!-- Primary Title & Meta Description -->
-    <title>For Sayang ❤️ — Blooms Made With Love | DigiBouquet</title>
-    <meta name="title" content="For Sayang ❤️ — Blooms Made With Love | DigiBouquet">
-    <meta name="description" content="A digital flower bouquet gift made with endless love for Sayang by Muqriz. Featuring interactive 2D animated blossoms, hidden romantic love messages, and polaroid memories.">
-    <meta name="keywords" content="digital bouquet, flower gift for sayang, romantic love letter, muqriz, valentine gift, interactive flower bouquet">
+    <title>For My Sayang ❤️ — Blooms Made With Love | DigiBouquet</title>
+    <meta name="title" content="For My Sayang ❤️ — Blooms Made With Love">
+    <meta name="description" content="A digital flower bouquet gift made with endless love for Sayang Syafiqa by Muqriz. Tap any flower to discover hidden romantic notes!">
+    <meta name="keywords" content="digital bouquet, flower gift for sayang, sayang syafiqa, romantic love letter, muqriz, valentine gift, interactive flower bouquet">
     <meta name="author" content="Muqriz">
     <link rel="canonical" href="https://syafiqa.muqriz.my/">
 
     <!-- Open Graph / Facebook / WhatsApp Preview Meta Tags -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://syafiqa.muqriz.my/">
-    <meta property="og:site_name" content="DigiBouquet for Sayang">
-    <meta property="og:title" content="For Sayang ❤️ — Blooms Made With Love">
-    <meta property="og:description" content="A digital flower bouquet gift made with endless love for Sayang by Muqriz. Tap any flower to discover hidden romantic notes!">
+    <meta property="og:site_name" content="My Sayang">
+    <meta property="og:title" content="For My Sayang ❤️">
+    <meta property="og:description" content="A digital flower bouquet gift made with endless love for Sayang Syafiqa by Muqriz. Tap any flower to discover hidden romantic notes!">
     <meta property="og:image" content="https://syafiqa.muqriz.my/assets/photo.jpg">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
@@ -29,14 +29,14 @@
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://syafiqa.muqriz.my/">
-    <meta name="twitter:title" content="For Sayang ❤️ — Blooms Made With Love">
-    <meta name="twitter:description" content="A digital flower bouquet gift made with endless love for Sayang by Muqriz. Tap any flower to discover hidden romantic notes!">
+    <meta name="twitter:title" content="For My Sayang ❤️">
+    <meta name="twitter:description" content="A digital flower bouquet gift made with endless love for Sayang Syafiqa by Muqriz. Tap any flower to discover hidden romantic notes!">
     <meta name="twitter:image" content="https://syafiqa.muqriz.my/assets/photo.jpg">
 
     <!-- iOS Apple Web App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Sayang's Flowers">
+    <meta name="apple-mobile-web-app-title" content="My Sayang">
 
     <!-- Local Self-Contained Stylesheet with Cache-Buster -->
     <link rel="stylesheet" href="{{ asset('css/style.css') }}?v={{ time() }}">
@@ -70,11 +70,11 @@
                         <div class="tape-strip"></div>
                         <div class="polaroid-frame">
                             <div class="polaroid-photo-wrapper">
-                                <img src="{{ asset('assets/photo.jpg') }}?v={{ time() }}" alt="Sayang & Us" id="polaroid-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'350\' viewBox=\'0 0 300 350\'><rect width=\'100%\' height=\'100%\' fill=\'%232c0b16\'/><path d=\'M150 140 Q180 100 210 140 T150 220 Q120 180 90 140 T150 140\' fill=\'%23e899ac\'/><text x=\'50%\' y=\'270\' fill=\'%23fdfbf7\' font-family=\'serif\' font-size=\'18\' text-anchor=\'middle\'>7/1/2026 ❤️</text></svg>'">
+                                <img src="{{ asset('assets/photo.jpg') }}?v={{ time() }}" alt="Sayang & Us" id="polaroid-img" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'350\' viewBox=\'0 0 300 350\'><rect width=\'100%\' height=\'100%\' fill=\'%232c0b16\'/><path d=\'M150 140 Q180 100 210 140 T150 220 Q120 180 90 140 T150 140\' fill=\'%23e899ac\'/><text x=\'50%\' y=\'270\' fill=\'%23fdfbf7\' font-family=\'serif\' font-size=\'18\' text-anchor=\'middle\'>Forever & Always ❤️</text></svg>'">
                                 <div class="photo-glare"></div>
                             </div>
                             <div class="polaroid-caption">
-                                <span id="caption-text" class="polaroid-caption-handwritten">7/1/2026</span>
+                                <span id="caption-text" class="polaroid-caption-handwritten">Forever & Always ❤️</span>
                             </div>
                         </div>
                     </div>

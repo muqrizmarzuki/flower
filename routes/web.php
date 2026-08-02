@@ -2,10 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
+/*
+|--------------------------------------------------------------------------
+| DigiBouquet Gift Routes for Sayang ❤️
+|--------------------------------------------------------------------------
+*/
+
 Route::get('/', function () {
     return view('flower');
-});
-
-Route::get('/preview-fonts', function () {
-    return view('preview-fonts');
 });
