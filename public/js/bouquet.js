@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Bouquet Engine - 100% Bulletproof iOS Safari & Mobile Touch Engine for Sayang
+   Bouquet Engine - Rock-Solid Unified Mobile & Desktop 2-Tap Engine for Sayang
    ========================================================================== */
 
 class BouquetEngine {
@@ -11,14 +11,10 @@ class BouquetEngine {
 
         this.time = 0;
         this.hoveredFlowerIndex = -1;
-        this.selectedFlowerIndex = -1; // Tracks 1st tap selection on mobile
+        this.selectedFlowerIndex = -1; // Tracks 1st tap selection on mobile & desktop
         this.mouseX = 0;
         this.mouseY = 0;
         this.onFlowerClick = onFlowerClick;
-
-        // iOS Safari touch tracking state
-        this.touchStartX = 0;
-        this.touchStartY = 0;
 
         // Image Cache for Official DigiBouquet Assets
         this.assets = {};
@@ -48,11 +44,11 @@ class BouquetEngine {
     init() {
         this.loadAssets();
 
-        const handleTap = (clientX, clientY) => {
+        const processTapInteraction = (clientX, clientY) => {
             const hitIndex = this.getFlowerIndexAtCoords(clientX, clientY);
 
             if (hitIndex === -1) {
-                // Tapped empty canvas space -> unselect current flower
+                // Tapped empty canvas area -> reset selection
                 this.selectedFlowerIndex = -1;
                 return;
             }
@@ -63,7 +59,7 @@ class BouquetEngine {
                 if (this.onFlowerClick && typeof this.onFlowerClick === 'function') {
                     this.onFlowerClick(flower);
                 }
-                this.selectedFlowerIndex = -1; // Reset after opening
+                this.selectedFlowerIndex = -1; // Reset selection after opening
             } else {
                 // 1st Tap on a flower -> LIFT UP & SELECT FLOWER!
                 this.selectedFlowerIndex = hitIndex;
@@ -73,43 +69,24 @@ class BouquetEngine {
             }
         };
 
-        // iOS Safari & Mobile Touch Handlers
-        const onTouchStart = (e) => {
-            if (e.touches && e.touches.length > 0) {
-                const touch = e.touches[0];
-                this.touchStartX = touch.clientX;
-                this.touchStartY = touch.clientY;
-                this.updatePointerCoords(touch.clientX, touch.clientY);
-            }
-        };
-
-        const onTouchEnd = (e) => {
-            if (e.changedTouches && e.changedTouches.length > 0) {
-                const touch = e.changedTouches[0];
-                const distMoved = Math.hypot(touch.clientX - this.touchStartX, touch.clientY - this.touchStartY);
-                
-                // If finger didn't drag/scroll (clean tap under 15px movement)
-                if (distMoved < 15) {
-                    if (e.cancelable) e.preventDefault(); // Stop iOS Safari synthetic mouse click duplication
-                    handleTap(touch.clientX, touch.clientY);
-                }
-            }
-        };
-
-        this.canvas.addEventListener('touchstart', onTouchStart, { passive: true });
-        this.canvas.addEventListener('touchend', onTouchEnd, { passive: false });
-
-        // Desktop Mouse Hover & Click
-        this.canvas.addEventListener('mousemove', (e) => {
+        // Pointer / Touch Movement (Updates hover coordinates on mouse or drag)
+        this.canvas.addEventListener('pointermove', (e) => {
             this.updatePointerCoords(e.clientX, e.clientY);
         });
 
-        this.canvas.addEventListener('click', (e) => {
-            // Only handle desktop mouse clicks (ignored on touch devices since touchend handled it)
-            if (matchMedia('(pointer: fine)').matches) {
-                handleTap(e.clientX, e.clientY);
-            }
+        // Unified Tap / Click Handler for iOS Safari, Chrome Mobile, Android, & Desktop
+        this.canvas.addEventListener('pointerup', (e) => {
+            this.updatePointerCoords(e.clientX, e.clientY);
+            processTapInteraction(e.clientX, e.clientY);
         });
+
+        // Fallback for browsers without Pointer Events
+        if (!window.PointerEvent) {
+            this.canvas.addEventListener('click', (e) => {
+                this.updatePointerCoords(e.clientX, e.clientY);
+                processTapInteraction(e.clientX, e.clientY);
+            });
+        }
 
         this.loadPreset();
     }
