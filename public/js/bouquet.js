@@ -1,5 +1,6 @@
 /* ==========================================================================
-   Bouquet Engine - Rock-Solid Unified Mobile & Desktop 2-Tap Engine for Sayang
+   Bouquet Engine - 2-Step Mobile Touch Engine for Sayang
+   (Guarantees flower lifts up FIRST on 1st tap, opens popup ONLY on 2nd tap!)
    ========================================================================== */
 
 class BouquetEngine {
@@ -11,10 +12,11 @@ class BouquetEngine {
 
         this.time = 0;
         this.hoveredFlowerIndex = -1;
-        this.selectedFlowerIndex = -1; // Tracks 1st tap selection on mobile & desktop
+        this.selectedFlowerIndex = -1; // Tracks 1st tap selection on mobile
         this.mouseX = 0;
         this.mouseY = 0;
         this.onFlowerClick = onFlowerClick;
+        this.lastTapTime = 0;
 
         // Image Cache for Official DigiBouquet Assets
         this.assets = {};
@@ -44,49 +46,69 @@ class BouquetEngine {
     init() {
         this.loadAssets();
 
-        const processTapInteraction = (clientX, clientY) => {
+        const handleMobileTap = (clientX, clientY) => {
             const hitIndex = this.getFlowerIndexAtCoords(clientX, clientY);
+            const now = Date.now();
 
             if (hitIndex === -1) {
-                // Tapped empty canvas area -> reset selection
+                // Tapped empty space -> reset selection
                 this.selectedFlowerIndex = -1;
                 return;
             }
 
-            if (this.selectedFlowerIndex === hitIndex) {
-                // 2nd Tap on the same flower -> OPEN LOVE NOTE MODAL POPUP!
+            // If 2nd tap happens on the SAME flower AND at least 250ms after the 1st tap:
+            if (this.selectedFlowerIndex === hitIndex && (now - this.lastTapTime > 250)) {
+                // 2nd Tap -> OPEN POPUP MODAL!
                 const flower = this.flowers[hitIndex];
                 if (this.onFlowerClick && typeof this.onFlowerClick === 'function') {
                     this.onFlowerClick(flower);
                 }
-                this.selectedFlowerIndex = -1; // Reset selection after opening
-            } else {
-                // 1st Tap on a flower -> LIFT UP & SELECT FLOWER!
+                this.selectedFlowerIndex = -1; // Reset selection
+            } else if (this.selectedFlowerIndex !== hitIndex) {
+                // 1st Tap on a flower -> LIFT UP & SELECT FLOWER (DO NOT OPEN POPUP)!
                 this.selectedFlowerIndex = hitIndex;
+                this.lastTapTime = now;
                 const flower = this.flowers[hitIndex];
                 this.mouseX = flower.x;
                 this.mouseY = flower.y;
             }
         };
 
-        // Pointer / Touch Movement (Updates hover coordinates on mouse or drag)
-        this.canvas.addEventListener('pointermove', (e) => {
+        // Touch event listener specifically for mobile devices
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        this.canvas.addEventListener('touchstart', (e) => {
+            if (e.touches && e.touches.length > 0) {
+                touchStartX = e.touches[0].clientX;
+                touchStartY = e.touches[0].clientY;
+                this.updatePointerCoords(touchStartX, touchStartY);
+            }
+        }, { passive: true });
+
+        this.canvas.addEventListener('touchend', (e) => {
+            if (e.changedTouches && e.changedTouches.length > 0) {
+                const touch = e.changedTouches[0];
+                const dist = Math.hypot(touch.clientX - touchStartX, touch.clientY - touchStartY);
+                // Ensure it's a clean tap (not a page scroll)
+                if (dist < 15) {
+                    if (e.cancelable) e.preventDefault();
+                    handleMobileTap(touch.clientX, touch.clientY);
+                }
+            }
+        }, { passive: false });
+
+        // Desktop mouse hover & click
+        this.canvas.addEventListener('mousemove', (e) => {
             this.updatePointerCoords(e.clientX, e.clientY);
         });
 
-        // Unified Tap / Click Handler for iOS Safari, Chrome Mobile, Android, & Desktop
-        this.canvas.addEventListener('pointerup', (e) => {
-            this.updatePointerCoords(e.clientX, e.clientY);
-            processTapInteraction(e.clientX, e.clientY);
+        this.canvas.addEventListener('click', (e) => {
+            // Ignore synthetic click events on mobile touch devices
+            if (matchMedia('(pointer: fine)').matches) {
+                handleMobileTap(e.clientX, e.clientY);
+            }
         });
-
-        // Fallback for browsers without Pointer Events
-        if (!window.PointerEvent) {
-            this.canvas.addEventListener('click', (e) => {
-                this.updatePointerCoords(e.clientX, e.clientY);
-                processTapInteraction(e.clientX, e.clientY);
-            });
-        }
 
         this.loadPreset();
     }
@@ -99,7 +121,7 @@ class BouquetEngine {
         }
     }
 
-    // Stable Touch Hitbox - Evaluates against fixed base coordinates (x, y) so lifting doesn't shift the touch target!
+    // Stable Touch Hitbox - Evaluates against fixed base coordinates (x, y) so lifting doesn't shift touch target
     getFlowerIndexAtCoords(clientX, clientY) {
         const rect = this.canvas.getBoundingClientRect();
         if (!rect.width || !rect.height) return -1;
