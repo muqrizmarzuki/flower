@@ -1,6 +1,5 @@
 /* ==========================================================================
-   Bouquet Engine - 2-Step Mobile Touch Engine for Sayang
-   (Stable Touch Hitbox & Reliable 1st/2nd Tap Workflow)
+   Bouquet Engine - 100% Bulletproof iOS Safari & Mobile Touch Engine for Sayang
    ========================================================================== */
 
 class BouquetEngine {
@@ -16,6 +15,10 @@ class BouquetEngine {
         this.mouseX = 0;
         this.mouseY = 0;
         this.onFlowerClick = onFlowerClick;
+
+        // iOS Safari touch tracking state
+        this.touchStartX = 0;
+        this.touchStartY = 0;
 
         // Image Cache for Official DigiBouquet Assets
         this.assets = {};
@@ -45,24 +48,24 @@ class BouquetEngine {
     init() {
         this.loadAssets();
 
-        const handleMobileTouch = (clientX, clientY) => {
+        const handleTap = (clientX, clientY) => {
             const hitIndex = this.getFlowerIndexAtCoords(clientX, clientY);
 
             if (hitIndex === -1) {
-                // Tapped empty space -> unselect current flower
+                // Tapped empty canvas space -> unselect current flower
                 this.selectedFlowerIndex = -1;
                 return;
             }
 
             if (this.selectedFlowerIndex === hitIndex) {
-                // 2nd Touch Tap on the same flower -> OPEN MODAL POPUP!
+                // 2nd Tap on the same flower -> OPEN LOVE NOTE MODAL POPUP!
                 const flower = this.flowers[hitIndex];
                 if (this.onFlowerClick && typeof this.onFlowerClick === 'function') {
                     this.onFlowerClick(flower);
                 }
                 this.selectedFlowerIndex = -1; // Reset after opening
             } else {
-                // 1st Touch Tap on a flower -> LIFT UP & SELECT FLOWER!
+                // 1st Tap on a flower -> LIFT UP & SELECT FLOWER!
                 this.selectedFlowerIndex = hitIndex;
                 const flower = this.flowers[hitIndex];
                 this.mouseX = flower.x;
@@ -70,39 +73,41 @@ class BouquetEngine {
             }
         };
 
-        // Mobile Touch Event Handling (iOS Safari & Android Chrome)
+        // iOS Safari & Mobile Touch Handlers
         const onTouchStart = (e) => {
             if (e.touches && e.touches.length > 0) {
                 const touch = e.touches[0];
-                handleMobileTouch(touch.clientX, touch.clientY);
+                this.touchStartX = touch.clientX;
+                this.touchStartY = touch.clientY;
+                this.updatePointerCoords(touch.clientX, touch.clientY);
+            }
+        };
+
+        const onTouchEnd = (e) => {
+            if (e.changedTouches && e.changedTouches.length > 0) {
+                const touch = e.changedTouches[0];
+                const distMoved = Math.hypot(touch.clientX - this.touchStartX, touch.clientY - this.touchStartY);
+                
+                // If finger didn't drag/scroll (clean tap under 15px movement)
+                if (distMoved < 15) {
+                    if (e.cancelable) e.preventDefault(); // Stop iOS Safari synthetic mouse click duplication
+                    handleTap(touch.clientX, touch.clientY);
+                }
             }
         };
 
         this.canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+        this.canvas.addEventListener('touchend', onTouchEnd, { passive: false });
 
-        // Pointer Up fallback for devices using Pointer Events
-        this.canvas.addEventListener('pointerup', (e) => {
-            // Only use pointerup on touch devices if touchstart didn't capture
-            if (e.pointerType === 'touch') {
-                // Handled via touchstart for zero latency
-            }
-        });
-
-        // Desktop Mouse Hover
+        // Desktop Mouse Hover & Click
         this.canvas.addEventListener('mousemove', (e) => {
             this.updatePointerCoords(e.clientX, e.clientY);
         });
 
-        // Desktop Mouse Click (Direct 1-click on desktop pointer)
         this.canvas.addEventListener('click', (e) => {
+            // Only handle desktop mouse clicks (ignored on touch devices since touchend handled it)
             if (matchMedia('(pointer: fine)').matches) {
-                const hitIndex = this.getFlowerIndexAtCoords(e.clientX, e.clientY);
-                if (hitIndex !== -1) {
-                    const flower = this.flowers[hitIndex];
-                    if (this.onFlowerClick && typeof this.onFlowerClick === 'function') {
-                        this.onFlowerClick(flower);
-                    }
-                }
+                handleTap(e.clientX, e.clientY);
             }
         });
 
@@ -125,12 +130,12 @@ class BouquetEngine {
         const x = (clientX - rect.left) * (this.width / rect.width);
         const y = (clientY - rect.top) * (this.height / rect.height);
 
-        // Check flowers from top-most layer to bottom-most layer with generous touch radius (0.75x size)
+        // Check flowers from top-most layer to bottom-most layer with generous touch radius (0.8x size)
         for (let i = this.flowers.length - 1; i >= 0; i--) {
             const flower = this.flowers[i];
             const dx = x - flower.x;
             const dy = y - flower.y; // Base Y coordinate (STABLE TOUCH ZONE)
-            if (Math.hypot(dx, dy) < flower.size * 0.75) {
+            if (Math.hypot(dx, dy) < flower.size * 0.8) {
                 return i;
             }
         }
