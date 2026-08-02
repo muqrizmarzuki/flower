@@ -27,6 +27,7 @@
 html, body {
     width: 100%;
     min-height: 100vh;
+    min-height: -webkit-fill-available;
     background-color: var(--bg-page);
     color: var(--color-text);
     font-family: var(--font-mono);
@@ -297,7 +298,7 @@ html, body {
     margin-top: -0.2rem;
 }
 
-/* Flower Hidden Love Note Modal Overlay - Highest Mobile Z-Index */
+/* 100% Full-Bleed Mobile Backdrop Modal Overlay */
 .modal-overlay {
     position: fixed !important;
     top: 0 !important;
@@ -306,15 +307,18 @@ html, body {
     bottom: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
-    background: rgba(0, 0, 0, 0.65) !important;
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
+    height: 100dvh !important;
+    min-height: -webkit-fill-available !important;
+    background: rgba(0, 0, 0, 0.72) !important;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
     display: flex !important;
     justify-content: center !important;
     align-items: center !important;
-    z-index: 999999 !important;
-    -webkit-transform: translateZ(999999px) !important;
-    transform: translateZ(999999px) !important;
+    z-index: 9999999 !important;
+    -webkit-transform: translateZ(9999999px) !important;
+    transform: translateZ(9999999px) !important;
+    margin: 0 !important;
     padding: 1.2rem;
     opacity: 1;
     visibility: visible;
@@ -336,9 +340,9 @@ html, body {
     border: 2px solid #000000;
     border-radius: 24px;
     padding: 1.8rem 1.4rem 1.6rem 1.4rem;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
     text-align: center;
-    z-index: 1000000 !important;
+    z-index: 10000000 !important;
     animation: modalPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -359,7 +363,7 @@ html, body {
     cursor: pointer;
     line-height: 1;
     padding: 6px 10px;
-    z-index: 1000001;
+    z-index: 10000001;
 }
 
 .modal-close-btn:hover {

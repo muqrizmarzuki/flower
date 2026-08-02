@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Bouquet Engine - Flawless Mobile Touch & Click Engine for Sayang
+   Bouquet Engine - Interactive Lift-Up & Floating Top Indicator for Sayang
    ========================================================================== */
 
 class BouquetEngine {
@@ -78,6 +78,13 @@ class BouquetEngine {
                 triggerClickAtCoords(e.clientX, e.clientY);
             });
 
+            const handleTouchMove = (e) => {
+                if (e.touches && e.touches.length > 0) {
+                    const touch = e.touches[0];
+                    this.updatePointerCoords(touch.clientX, touch.clientY);
+                }
+            };
+
             const handleTouchEnd = (e) => {
                 if (e.changedTouches && e.changedTouches.length > 0) {
                     const touch = e.changedTouches[0];
@@ -85,6 +92,8 @@ class BouquetEngine {
                 }
             };
 
+            this.canvas.addEventListener('touchstart', handleTouchMove, { passive: true });
+            this.canvas.addEventListener('touchmove', handleTouchMove, { passive: true });
             this.canvas.addEventListener('touchend', handleTouchEnd, { passive: true });
         }
 
@@ -110,8 +119,7 @@ class BouquetEngine {
         for (let i = this.flowers.length - 1; i >= 0; i--) {
             const flower = this.flowers[i];
             const dx = x - flower.x;
-            const dy = y - flower.y;
-            // Radius tolerance for mobile touch targets (~75% of flower size)
+            const dy = y - (flower.y + (flower.liftOffset || 0));
             if (Math.hypot(dx, dy) < flower.size * 0.75) {
                 return flower;
             }
@@ -136,21 +144,21 @@ class BouquetEngine {
                 name: 'Golden Sunflower',
                 imgSrc: 'assets/official/color_sunflower.webp',
                 message: 'You are my sunshine, Sayang! Thank you for bringing warmth and laughter into my life every day. 🌻❤️',
-                x: 250, y: 110, size: 130, rotation: -0.02, hoverScale: 1
+                x: 250, y: 110, size: 130, rotation: -0.02, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'orchid',
                 name: 'Blush Orchid',
                 imgSrc: 'assets/official/color_orchid.webp',
                 message: 'You are as rare, elegant, and precious to me as an orchid. I treasure you endlessly, Sayang! ✨',
-                x: 160, y: 115, size: 120, rotation: -0.08, hoverScale: 1
+                x: 160, y: 115, size: 120, rotation: -0.08, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'lily',
                 name: 'White Lily',
                 imgSrc: 'assets/lily.webp',
                 message: 'Pure, sweet, and beautiful—just like your heart, Sayang! 🌺',
-                x: 340, y: 115, size: 125, rotation: 0.08, hoverScale: 1
+                x: 340, y: 115, size: 125, rotation: 0.08, hoverScale: 1, liftOffset: 0
             },
 
             // Middle Row Focal Blossoms
@@ -159,35 +167,35 @@ class BouquetEngine {
                 name: 'Pink Tulip',
                 imgSrc: 'assets/tulip.webp',
                 message: 'You bring endless joy and magic to my life every single day, Sayang! 🌷',
-                x: 120, y: 170, size: 115, rotation: -0.1, hoverScale: 1
+                x: 120, y: 170, size: 115, rotation: -0.1, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'peony',
                 name: 'Pink Peony',
                 imgSrc: 'assets/peony.webp',
                 message: 'Your beautiful smile brightens up my whole world. Being with you is my favorite place to be, Sayang! 🌸',
-                x: 190, y: 165, size: 120, rotation: 0.03, hoverScale: 1
+                x: 190, y: 165, size: 120, rotation: 0.03, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'rose',
                 name: 'Red Velvet Rose',
                 imgSrc: 'assets/rose.webp',
                 message: 'My love for you grows stronger with every passing second. You hold the key to my heart forever, Sayang! 🌹',
-                x: 250, y: 155, size: 125, rotation: -0.03, hoverScale: 1
+                x: 250, y: 155, size: 125, rotation: -0.03, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'ranunculus',
                 name: 'Blush Ranunculus',
                 imgSrc: 'assets/official/color_ranunculus.webp',
                 message: 'Through every season of life, I will choose you over and over again, Sayang! ❤️',
-                x: 310, y: 165, size: 120, rotation: -0.04, hoverScale: 1
+                x: 310, y: 165, size: 120, rotation: -0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'anemone',
                 name: 'Purple Anemone',
                 imgSrc: 'assets/anemone.webp',
                 message: 'My heart beats only for you, my dearest Sayang! 🪻',
-                x: 380, y: 170, size: 115, rotation: 0.1, hoverScale: 1
+                x: 380, y: 170, size: 115, rotation: 0.1, hoverScale: 1, liftOffset: 0
             },
 
             // Front Row Accents
@@ -196,28 +204,28 @@ class BouquetEngine {
                 name: 'Blush Carnation',
                 imgSrc: 'assets/carnation.webp',
                 message: 'Thank you for being my best friend, my confidante, and my soulmate. I love you so much, Sayang! 🏵️',
-                x: 165, y: 210, size: 110, rotation: 0.06, hoverScale: 1
+                x: 165, y: 210, size: 110, rotation: 0.06, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'daisy',
                 name: 'Sweet White Daisy',
                 imgSrc: 'assets/daisy.webp',
                 message: 'Forever and always, my heart belongs to you and only you, Sayang! ❤️✨',
-                x: 220, y: 220, size: 100, rotation: -0.04, hoverScale: 1
+                x: 220, y: 220, size: 100, rotation: -0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'dahlia',
                 name: 'Crimson Dahlia',
                 imgSrc: 'assets/dahlia.webp',
                 message: 'You are the most precious gift in my life, Sayang! 🌼',
-                x: 280, y: 220, size: 105, rotation: 0.04, hoverScale: 1
+                x: 280, y: 220, size: 105, rotation: 0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'zinnia',
                 name: 'Pink Zinnia',
                 imgSrc: 'assets/zinnia.webp',
                 message: 'Loving you is the easiest and best thing I have ever done! 🌸',
-                x: 335, y: 210, size: 110, rotation: -0.06, hoverScale: 1
+                x: 335, y: 210, size: 110, rotation: -0.06, hoverScale: 1, liftOffset: 0
             }
         ];
     }
@@ -233,11 +241,16 @@ class BouquetEngine {
         let hoveredFound = -1;
         this.flowers.forEach((flower, index) => {
             const dx = this.mouseX - flower.x;
-            const dy = this.mouseY - flower.y;
+            const dy = this.mouseY - (flower.y + (flower.liftOffset || 0));
             const isHovered = Math.hypot(dx, dy) < flower.size * 0.45;
 
             if (isHovered) hoveredFound = index;
 
+            // Lift-Up Animation (-22px vertical glide up when touched)
+            const targetLift = isHovered ? -22 : 0;
+            flower.liftOffset += (targetLift - flower.liftOffset) * 0.2;
+
+            // Hover Scale
             const targetScale = isHovered ? 1.08 : 1.0;
             flower.hoverScale += (targetScale - flower.hoverScale) * 0.15;
 
@@ -247,7 +260,13 @@ class BouquetEngine {
         this.hoveredFlowerIndex = hoveredFound;
         this.canvas.style.cursor = hoveredFound !== -1 ? 'pointer' : 'default';
 
-        // 3. Draw Bush Wrapper Top Overlap
+        // 3. Draw Floating Top Indicator Badge over active flower
+        if (hoveredFound !== -1) {
+            const activeFlower = this.flowers[hoveredFound];
+            this.renderTopIndicator(activeFlower);
+        }
+
+        // 4. Draw Bush Wrapper Top Overlap
         this.renderBushTop();
     }
 
@@ -273,7 +292,9 @@ class BouquetEngine {
         this.ctx.save();
 
         const microSway = Math.sin(this.time * 1.5 + flower.x) * 1.5;
-        this.ctx.translate(flower.x + microSway, flower.y);
+        const currentY = flower.y + (flower.liftOffset || 0);
+
+        this.ctx.translate(flower.x + microSway, currentY);
         this.ctx.rotate(flower.rotation);
         this.ctx.scale(flower.hoverScale, flower.hoverScale);
 
@@ -282,6 +303,47 @@ class BouquetEngine {
             const sz = flower.size;
             this.ctx.drawImage(img, -sz / 2, -sz / 2, sz, sz);
         }
+
+        this.ctx.restore();
+    }
+
+    renderTopIndicator(flower) {
+        this.ctx.save();
+
+        const currentY = flower.y + (flower.liftOffset || 0) - (flower.size * 0.52);
+        const text = "💌 Tap for note ✨";
+
+        this.ctx.font = "bold 13px 'Outfit', sans-serif";
+        const textMetrics = this.ctx.measureText(text);
+        const paddingX = 14;
+        const pillWidth = textMetrics.width + paddingX * 2;
+        const pillHeight = 28;
+
+        const pillX = flower.x - pillWidth / 2;
+        const pillY = currentY - pillHeight;
+
+        // Draw Pill Shadow
+        this.ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
+        this.ctx.shadowBlur = 8;
+        this.ctx.shadowOffsetY = 3;
+
+        // Draw Pill Background
+        this.ctx.beginPath();
+        this.ctx.roundRect(pillX, pillY, pillWidth, pillHeight, 14);
+        this.ctx.fillStyle = "#FFFFFF";
+        this.ctx.fill();
+
+        // Draw Pill Border
+        this.ctx.shadowColor = "transparent";
+        this.ctx.lineWidth = 1.5;
+        this.ctx.strokeStyle = "#111111";
+        this.ctx.stroke();
+
+        // Draw Pill Text
+        this.ctx.fillStyle = "#111111";
+        this.ctx.textAlign = "center";
+        this.ctx.textBaseline = "middle";
+        this.ctx.fillText(text, flower.x, pillY + pillHeight / 2);
 
         this.ctx.restore();
     }

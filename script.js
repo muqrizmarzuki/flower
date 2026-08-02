@@ -27,6 +27,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (modalTitle) modalTitle.textContent = flower.name || 'Flower';
         if (modalMessage) modalMessage.textContent = flower.message || 'I love you!';
         
+        // Lock body scrolling on mobile devices for 100% full-bleed backdrop overlay
+        document.body.style.overflow = 'hidden';
+
         modal.classList.remove('hidden');
         modal.style.display = 'flex';
         modal.setAttribute('aria-hidden', 'false');
@@ -37,6 +40,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function closeModal() {
         if (!modal) return;
+
+        // Restore body scrolling
+        document.body.style.overflow = '';
+
         modal.classList.add('hidden');
         modal.style.display = 'none';
         modal.setAttribute('aria-hidden', 'true');
