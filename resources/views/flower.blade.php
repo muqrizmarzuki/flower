@@ -8,12 +8,11 @@
     <meta name="theme-color" content="#F9F9EE">
 
     <!-- Primary Title & Meta Description -->
-    <title>For My Sayang ❤️ — Blooms Made With Love | DigiBouquet</title>
-    <meta name="title" content="For My Sayang ❤️ — Blooms Made With Love">
+    <title>For My Sayang ❤️ | DigiBouquet</title>
+    <meta name="title" content="For My Sayang ❤️">
     <meta name="description" content="A digital flower bouquet gift made with endless love for Sayang Syafiqa by Muqriz. Tap any flower to discover hidden romantic notes!">
-    <meta name="keywords" content="digital bouquet, flower gift for sayang, sayang syafiqa, romantic love letter, muqriz, valentine gift, interactive flower bouquet">
+    <meta name="keywords" content="Sayang, Muqriz, DigiBouquet, Digital Flower Bouquet, Love Gift, Romantic Flowers, Digital Roses">
     <meta name="author" content="Muqriz">
-    <link rel="canonical" href="https://syafiqa.muqriz.my/">
 
     <!-- Open Graph / Facebook / WhatsApp Preview Meta Tags -->
     <meta property="og:type" content="website">
@@ -21,17 +20,17 @@
     <meta property="og:site_name" content="My Sayang">
     <meta property="og:title" content="For My Sayang ❤️">
     <meta property="og:description" content="A digital flower bouquet gift made with endless love for Sayang Syafiqa by Muqriz. Tap any flower to discover hidden romantic notes!">
-    <meta property="og:image" content="https://syafiqa.muqriz.my/assets/photo.jpg">
+    <meta property="og:image" content="{{ asset('assets/photo.jpg') }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:locale" content="en_US">
+    <meta property="og:image:alt" content="Muqriz & Sayang Photo">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://syafiqa.muqriz.my/">
     <meta name="twitter:title" content="For My Sayang ❤️">
     <meta name="twitter:description" content="A digital flower bouquet gift made with endless love for Sayang Syafiqa by Muqriz. Tap any flower to discover hidden romantic notes!">
-    <meta name="twitter:image" content="https://syafiqa.muqriz.my/assets/photo.jpg">
+    <meta name="twitter:image" content="{{ asset('assets/photo.jpg') }}">
 
     <!-- iOS Apple Web App Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -47,7 +46,6 @@
 
     <!-- Main Container -->
     <div class="page-container">
-        
         <!-- Romantic Header Typography (Option 9: Satisfy Brush Script) -->
         <header class="header-typography">
             <h1 id="header-title-text" class="header-title font-style-9">Blooms Made With Love</h1>
@@ -64,7 +62,6 @@
 
                 <!-- Cards Container (Polaroid Photo + Handwritten Message Card) -->
                 <div class="cards-flex-container">
-                    
                     <!-- 1. Floating Polaroid Photo Frame -->
                     <div class="polaroid-card" id="polaroid-card">
                         <div class="tape-strip"></div>
@@ -97,7 +94,6 @@
                             <div class="card-subtagline">Forever my girl ❤️</div>
                         </div>
                     </div>
-
                 </div>
 
             </div>

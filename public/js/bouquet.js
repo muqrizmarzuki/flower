@@ -1,6 +1,5 @@
 /* ==========================================================================
-   Bouquet Engine - 2-Step Mobile Touch Engine for Sayang
-   (Clamped Top Indicator Badge & Lowered Canvas Headroom so Top Badges Never Clip)
+   Bouquet Engine - Personal Romantic Flower Messages for Sayang (Jabigah) from Muqriz
    ========================================================================== */
 
 class BouquetEngine {
@@ -32,7 +31,7 @@ class BouquetEngine {
             { name: 'lily', file: 'lily.webp' },
             { name: 'zinnia', file: 'zinnia.webp' },
             { name: 'tulip', file: 'tulip.webp' },
-
+            
             // Official Color Additions
             { name: 'ranunculus', file: 'official/color_ranunculus.webp' },
             { name: 'orchid', file: 'official/color_orchid.webp' },
@@ -146,7 +145,7 @@ class BouquetEngine {
 
             const dxBody = x - currentFlower.x;
             const dyBody = y - currentY;
-
+            
             const dxPill = x - currentFlower.x;
             const dyPill = y - Math.max(8, currentY - currentFlower.size * 0.52 - 14);
 
@@ -187,29 +186,28 @@ class BouquetEngine {
     }
 
     loadPreset() {
-        // Perfectly Spaced & Headroom-Optimized Flower Placement
-        // Back row stems lowered to y=110 to give ample top padding for badges
+        // Deeply Personal Messages from Muqriz to Sayang (Jabigah)
         this.flowers = [
             // Back Row Stems (Tallest Crowns with Ample Headroom)
             {
                 type: 'sunflower',
                 name: 'Golden Sunflower',
                 imgSrc: 'assets/official/color_sunflower.webp',
-                message: 'You are my sunshine, Sayang! Thank you for bringing warmth and laughter into my life every day. 🌻❤️',
+                message: 'Ever since 25 May 2017, you have been the bright sunshine in my life, Sayang. Just seeing your smile puts me in a good mood every single day! 🌻',
                 x: 250, y: 110, size: 135, rotation: -0.02, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'orchid',
                 name: 'Blush Orchid',
                 imgSrc: 'assets/official/color_orchid.webp',
-                message: 'You are as rare, elegant, and precious to me as an orchid. I treasure you endlessly, Sayang! ✨',
+                message: 'Back in school I used to think kenapa la panggil jabigah ni hahah, but it is so cute! You will always be my forever Jabigah. ✨',
                 x: 155, y: 122, size: 120, rotation: -0.08, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'lily',
                 name: 'White Lily',
                 imgSrc: 'assets/lily.webp',
-                message: 'Pure, sweet, and beautiful just like your heart, Sayang! 🌺',
+                message: 'I love how sweet and genuine your heart is, Sayang. Every simple thing you do to take care of me always puts a smile on my face. 🌺',
                 x: 345, y: 122, size: 125, rotation: 0.08, hoverScale: 1, liftOffset: 0
             },
 
@@ -218,35 +216,35 @@ class BouquetEngine {
                 type: 'rose',
                 name: 'Red Velvet Rose',
                 imgSrc: 'assets/rose.webp',
-                message: 'My love for you grows stronger with every passing second. You hold the key to my heart forever, Sayang! 🌹',
+                message: 'A red rose for my one and only! After all these years together since 2017, I love you more and more every single day, Sayang! 🌹❤️',
                 x: 250, y: 180, size: 125, rotation: -0.03, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'tulip',
                 name: 'Pink Tulip',
                 imgSrc: 'assets/tulip.webp',
-                message: 'You bring endless joy and magic to my life every single day, Sayang! 🌷',
+                message: 'I don’t even care where we go, I just love going out with you, Sayang. Any date with you is the best part of my day! 🌷',
                 x: 120, y: 185, size: 115, rotation: -0.1, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'peony',
                 name: 'Pink Peony',
                 imgSrc: 'assets/peony.webp',
-                message: 'Your beautiful smile brightens up my whole world. Being with you is my favorite place to be, Sayang! 🌸',
+                message: 'Pink peonies for my Jabigah! Your laugh and cute smile are my absolute favorite things in the world. 🌸',
                 x: 185, y: 182, size: 120, rotation: 0.03, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'ranunculus',
                 name: 'Blush Ranunculus',
                 imgSrc: 'assets/official/color_ranunculus.webp',
-                message: 'Through every season of life, I will choose you over and over again, Sayang! ❤️',
+                message: 'Thank you for always taking care of me so thoughtfully, Sayang. Your gentleness and love mean everything to me. ❤️',
                 x: 315, y: 182, size: 120, rotation: -0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'anemone',
                 name: 'Purple Anemone',
                 imgSrc: 'assets/anemone.webp',
-                message: 'My heart beats only for you, my dearest Sayang! 🪻',
+                message: 'I catch myself thinking about you all day long, Sayang. From school days until now, you are always on my mind! 🪻',
                 x: 380, y: 185, size: 115, rotation: 0.1, hoverScale: 1, liftOffset: 0
             },
 
@@ -255,28 +253,28 @@ class BouquetEngine {
                 type: 'carnation',
                 name: 'Blush Carnation',
                 imgSrc: 'assets/carnation.webp',
-                message: 'Thank you for being my best friend, my confidante, and my soulmate. I love you so much, Sayang! 🏵️',
+                message: 'Let’s go treat you to a cold Teh Ais! Thank you for being my girlfriend and my best friend all these years, Sayang. 🏵️',
                 x: 165, y: 232, size: 110, rotation: 0.06, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'daisy',
                 name: 'Sweet White Daisy',
                 imgSrc: 'assets/daisy.webp',
-                message: 'Forever and always, my heart belongs to you and only you, Sayang! ❤️✨',
+                message: 'Being with you is just so easy and comfortable, Sayang. I love our journey together so much! 🌼',
                 x: 220, y: 240, size: 100, rotation: -0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'dahlia',
                 name: 'Crimson Dahlia',
                 imgSrc: 'assets/dahlia.webp',
-                message: 'You are the most precious gift in my life, Sayang! 🌼',
+                message: 'I am so proud of us, Sayang. I will always be right here by your side supporting you in everything you do! ❤️',
                 x: 280, y: 240, size: 105, rotation: 0.04, hoverScale: 1, liftOffset: 0
             },
             {
                 type: 'zinnia',
                 name: 'Pink Zinnia',
                 imgSrc: 'assets/zinnia.webp',
-                message: 'Loving you is the easiest and best thing I have ever done! 🌸',
+                message: 'I hope I can marry you soon and travel the whole world with you! Love you forever, my Jabigah. 🌸',
                 x: 335, y: 232, size: 110, rotation: -0.06, hoverScale: 1, liftOffset: 0
             }
         ];
