@@ -54,13 +54,13 @@
         <!-- Main Gift Stage: Single Combined Hybrid Bouquet -->
         <main class="gift-stage">
             <div class="bouquet-wrapper">
-                
+
                 <!-- Live Hybrid Canvas Bouquet Stage -->
                 <div class="canvas-container">
                     <canvas id="bouquet-canvas" width="500" height="420"></canvas>
                 </div>
 
-                <!-- Cards Container (Polaroid Photo + Handwritten Message Card) -->
+
                 <div class="cards-flex-container">
                     <!-- 1. Floating Polaroid Photo Frame -->
                     <div class="polaroid-card" id="polaroid-card">
@@ -94,6 +94,29 @@
                             <div class="card-subtagline">Forever my girl ❤️</div>
                         </div>
                     </div>
+                </div>
+
+                <!-- Daily Love Note & Milestone Badge -->
+                <div class="daily-love-wrapper">
+                    <div class="days-together-badge">
+                        <span>💖</span>
+                        <span id="days-together-text">Together Since 25 May 2017</span>
+                    </div>
+
+                    <div class="daily-note-card" id="daily-note-card">
+                        <div class="daily-note-header">
+                            <span class="daily-note-tag">🥠 Today's Love Note</span>
+                            <span class="daily-note-date" id="daily-note-date">Today</span>
+                        </div>
+                        <p class="daily-note-text" id="daily-note-text">"Tap to reveal today's secret love message from Muqriz! ✨"</p>
+                    </div>
+                </div>
+
+                <!-- Secret Notes Bar -->
+                <div class="secret-bar">
+                    <span class="secret-bar-label">💌 Secret Notes</span>
+                    <div class="secret-bar-track"><div class="secret-bar-fill" id="secret-bar-fill"></div></div>
+                    <span class="secret-bar-count" id="secret-bar-count">0/6</span>
                 </div>
 
             </div>

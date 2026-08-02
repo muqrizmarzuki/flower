@@ -3,7 +3,7 @@
    (100% Self-Contained Local Assets & Option 9 Satisfy Romantic Typography)
    ========================================================================== */
 
-@import 'public/css/fonts.css';
+@import 'fonts.css';
 
 :root {
     --bg-page: #F9F9EE;
@@ -294,6 +294,122 @@ html, body {
 .card-label {
     color: #111111;
     font-weight: 600;
+}
+
+/* Simple Secret Notes Bar */
+.secret-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 340px;
+    margin: 0.8rem auto 0 auto;
+    padding: 8px 14px;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1.5px solid #111111;
+    border-radius: 30px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+}
+
+.secret-bar-label {
+    font-family: 'Martian Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #111111;
+    white-space: nowrap;
+}
+
+.secret-bar-track {
+    flex: 1;
+    height: 6px;
+    background: #EAEAEA;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.secret-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #C02636, #FF6575);
+    border-radius: 6px;
+    transition: width 0.6s ease;
+}
+
+.secret-bar-count {
+    font-family: 'Martian Mono', monospace;
+    font-size: 0.62rem;
+    font-weight: 700;
+    color: #C02636;
+    white-space: nowrap;
+}
+
+/* Daily Love Note & Milestone Card */
+.daily-love-wrapper {
+    width: 100%;
+    max-width: 360px;
+    margin: 1.5rem auto 0 auto;
+    text-align: center;
+}
+
+.days-together-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #FFFDF9;
+    border: 1.5px solid #111111;
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-family: 'Martian Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #C02636;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 0.8rem;
+}
+
+.daily-note-card {
+    background: #FFFFFF;
+    border: 2px solid #111111;
+    border-radius: 20px;
+    padding: 1.2rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.daily-note-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+}
+
+.daily-note-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+    border-bottom: 1px dashed #E0E0E0;
+    padding-bottom: 0.4rem;
+}
+
+.daily-note-tag {
+    font-family: 'Martian Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #C02636;
+    text-transform: uppercase;
+}
+
+.daily-note-date {
+    font-size: 0.75rem;
+    color: #777777;
+    font-family: var(--font-sans);
+}
+
+.daily-note-text {
+    font-family: 'Satisfy', cursive;
+    font-size: 1.25rem;
+    color: #111111;
+    line-height: 1.4;
+    margin: 0;
 }
 
 .card-value {
